@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+metadata:
+  name: pw-deployment
+kind: Deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: elijahaiono
+  template:
+    metadata:
+      labels:
+        app: elijahaiono
+    spec:
+      containers:
+      - name: pw-cit-270
+        image: elilaiono/cit270
+        volumeMounts:
+        - name: ssl
+          mountPath: "/usr/src/app/SSL"
+        command: ["npm"]
+        args: ["run", "start"]
+        ports:
+          - containerPort: 443
+        resources:
+          requests:
+            cpu: 0.125
+            memory: 500Mi
+          limits:
+            cpu: 0.125
+            memory: 600Mi
+        imagePullPolicy: IfNotPresent
+      volumes:
+      - name: ssl
+        secret: 
+          secretName: ssl.secret
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pw-loadbalancer
+spec:
+  selector:
+    app: elijahaiono
+  type: LoadBalancer
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+      protocol: TCP
+    - name: https
+      port: 443
+      targetPort: 443
+      protocol: TCP
+
+      
