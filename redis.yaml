@@ -37,7 +37,7 @@ spec:
           - name: REDIS_PASS
             valueFrom:
               secretKeyRef:
-                name: redis-secrets-elijah
+                name: redis-secret-elijah
                 key: REDIS_PASS
           volumeMounts:
             - name: redis-elijah-volume

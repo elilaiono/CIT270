@@ -3,14 +3,14 @@ const bodyParser = require("body-parser");
 const https = require('https');
 const fs = require('fs');
 const {v4 : uuidv4} = require("uuid");
-const port = 4043;
+const port = 443;
 const app = express(0);
 const {createClient} = require('redis');
 const md5 = require('md5');
 
 const redisClient = createClient(
     {
-    Url:"redis://default@localhost:6379",
+    Url:`redis://default:${process.env.REDIS_PASS}@redis-stedi-elijah:6379`,
     }
 );
 
@@ -23,9 +23,6 @@ https.createServer({
     await redisClient.connect();
     console.log('Listening...')
 });
-
-
-
 // app.listen(port, async ()=>{
 //     console.log('listening on port'+port);
     
